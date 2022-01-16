@@ -1,5 +1,3 @@
-import { Connection, createConnection } from 'typeorm';
+import { createConnection } from "typeorm";
 
-const connection: Connection = await createConnection()
-
-export { connection }
+createConnection().then(()=> console.log("Dba connected"))
