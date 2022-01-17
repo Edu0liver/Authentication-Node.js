@@ -15,6 +15,7 @@ interface IResponse {
         name: string;
         email: string;
     };
+    refresh_token: string;
 }
 
 @injectable()
@@ -42,12 +43,24 @@ class AuthenticateUserUseCase {
             expiresIn: "1d"
         })
 
+        const refresh_token = sign({ email }, "123", {
+            subject: user.id,
+            expiresIn: "1d"
+        })
+
+        await this.usersRepository.create({
+            user_id: user.id,
+            refresh_token,
+            expires_date: new Date
+        })
+
         const authReturn: IResponse = {
             token,
             user: {
                 name: user.name,
                 email: user.email
-            }
+            },
+            refresh_token
         }
 
         return authReturn;
