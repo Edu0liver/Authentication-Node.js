@@ -2,6 +2,7 @@ import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { inject, injectable } from "tsyringe";
+import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 
 
 interface IRequest {
@@ -23,7 +24,9 @@ class AuthenticateUserUseCase {
 
     constructor(
         @inject("UsersRepository")
-        private usersRepository: IUsersRepository
+        private usersRepository: IUsersRepository,
+        @inject("UsersTokensRepository")
+        private usersTokensRepository: IUsersTokensRepository
     ){}
 
     async execute({ email, password }: IRequest): Promise<IResponse>{
@@ -48,7 +51,7 @@ class AuthenticateUserUseCase {
             expiresIn: "1d"
         })
 
-        await this.usersRepository.create({
+        await this.usersTokensRepository.create({
             user_id: user.id,
             refresh_token,
             expires_date: new Date
