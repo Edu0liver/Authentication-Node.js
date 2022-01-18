@@ -1,6 +1,7 @@
 import { sign, verify } from 'jsonwebtoken';
 import { IUsersTokensRepository } from '../../repositories/IUsersTokensRepository';
 import { inject, injectable } from 'tsyringe';
+import dayjs from 'dayjs';
 
 interface IPayload {
     sub: string;
@@ -35,10 +36,12 @@ class RefreshTokenService {
             expiresIn: "1d"
         })
 
+        const expires_date = dayjs().add(3, "day").toDate();
+
         await this.usersTokensRepository.create({
             user_id,
             refresh_token: newRefreshToken,
-            expires_date: new Date()
+            expires_date
         })
 
         const newToken = sign({}, "123", {

@@ -3,7 +3,7 @@ import { sign } from "jsonwebtoken";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { inject, injectable } from "tsyringe";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
-
+import dayjs from "dayjs";
 
 interface IRequest {
     email: string;
@@ -51,10 +51,12 @@ class AuthenticateUserUseCase {
             expiresIn: "1d"
         })
 
+        const expires_date = dayjs().add(3, "day").toDate();
+
         await this.usersTokensRepository.create({
             user_id: user.id,
             refresh_token,
-            expires_date: new Date
+            expires_date
         })
 
         const authReturn: IResponse = {
