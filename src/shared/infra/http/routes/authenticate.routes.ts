@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { RefreshTokenController } from "module/account/services/refreshToken/RefreshTokenController";
 import { AuthenticateUserController } from "../../../../module/account/services/authenticateUser/AuthenticateUserController";
+import { RefreshTokenController } from "../../../../module/account/services/refreshToken/RefreshTokenController";
 
 const authenticateRoutes = Router();
 
